@@ -230,12 +230,12 @@ def p_tipo(p):
             | IMAGE f_saveType'''
 
 def p_functions(p):
-    '''functions : DEF tipo ID f_saveModule LPAREN RPAREN COLON NEWLINE block functions
-                 | DEF tipo ID f_saveModule LPAREN tipo ID f_addToParam parameterList RPAREN COLON NEWLINE block functions
-                 | DEF VOID ID f_saveModule LPAREN RPAREN COLON NEWLINE block functions
-                 | DEF VOID ID f_saveModule LPAREN tipo ID f_addToParam parameterList RPAREN COLON NEWLINE block functions
-                 | DEF VOID MAIN f_saveModule LPAREN RPAREN COLON NEWLINE block functions
-                 | DEF VOID MAIN f_saveModule LPAREN tipo ID f_addToParam parameterList RPAREN COLON NEWLINE block functions
+    '''functions : DEF tipo ID f_saveModule LPAREN RPAREN block functions
+                 | DEF tipo ID f_saveModule LPAREN tipo ID f_addToParam parameterList RPAREN block functions
+                 | DEF VOID ID f_saveModule LPAREN RPAREN block functions
+                 | DEF VOID ID f_saveModule LPAREN tipo ID f_addToParam parameterList RPAREN block functions
+                 | DEF VOID MAIN f_saveModule LPAREN RPAREN block functions
+                 | DEF VOID MAIN f_saveModule LPAREN tipo ID f_addToParam parameterList RPAREN block functions
                  | empty'''
 
 def p_f_saveModule(p):
@@ -263,18 +263,18 @@ def p_f_addToParam(p):
 
 
 def p_assign(p):
-    '''assign : ID f_checkID EQUAL expression NEWLINE f_generateEqual assign
-              | empty'''
+    '''assign : ID f_checkID EQUAL expression NEWLINE f_generateEqual
+                | empty'''
 
 def p_f_generateEqual(p):
     'f_generateEqual :'
-    global counterQuadruples
+#    global counterQuadruples
     #Falta validar que sea una igualdad con tipos correctos
     #Sacar dos operandos y validarlos
-    operand2 = operandsStack.pop()
-    operand1 = operandsStack.pop()
-    Quadruples[counterQuadruples]=['=', operand2, -1, operand1]
-    counterQuadruples+=1
+#    operand2 = operandsStack.pop()
+#    operand1 = operandsStack.pop()
+#    Quadruples[counterQuadruples]=['=', operand2, -1, operand1]
+#    counterQuadruples+=1
 
 def p_f_checkID(p):
     'f_checkID : '
@@ -288,20 +288,18 @@ def p_f_checkID(p):
         operandsStack.push(ProcVars[moduleName][addrTable][p[-1]])
         typesStack.push(ProcVars[moduleName][typeTable][p[-1]])
 # def p_main(p):
-#     '''main : DEF VOID MAIN f_saveModule LPAREN RPAREN COLON NEWLINE block 
-# 			| DEF VOID MAIN f_saveModule LPAREN tipo ID f_addToParam parameterList RPAREN COLON NEWLINE block'''
+#     '''main : DEF VOID MAIN f_saveModule LPAREN RPAREN block 
+# 			| DEF VOID MAIN f_saveModule LPAREN tipo ID f_addToParam parameterList RPAREN block'''
 
 def p_block(p):
-    '''block : empty
-             | TAB newline_tab statement moreStatements'''
+    '''block : COLON NEWLINE statement moreStatements NEWLINE SEMICOLON NEWLINE
+                | COLON NEWLINE statement moreStatements SEMICOLON NEWLINE
+                | COLON statement moreStatements NEWLINE SEMICOLON NEWLINE
+                | COLON statement moreStatements SEMICOLON NEWLINE'''
 
 def p_moreStatements(p):
     '''moreStatements : empty
-                      | TAB newline_tab statement moreStatements'''
-
-def p_newline_tab(p):
-    '''newline_tab : empty
-                    | NEWLINE TAB newline_tab'''
+                      | statement moreStatements'''
 
 def p_statement(p):
     '''statement : vars 
@@ -312,12 +310,12 @@ def p_statement(p):
                  | RETURN expression NEWLINE'''
 
 def p_condition(p):
-    '''condition : IF f_isCondition expression COLON NEWLINE block
-                 | IF f_isCondition expression COLON NEWLINE block ELSE COLON NEWLINE block'''
+    '''condition : IF f_isCondition expression block
+                 | IF f_isCondition expression block ELSE block'''
 
 def p_cycle(p):
-    '''cycle : WHILE f_isCondition expression COLON NEWLINE block
-             | DO COLON NEWLINE block WHILE f_isCondition expression NEWLINE'''
+    '''cycle : WHILE f_isCondition expression block
+             | DO block WHILE f_isCondition expression NEWLINE'''
 
 def p_f_isCondition(p):
     'f_isCondition : '
@@ -325,8 +323,8 @@ def p_f_isCondition(p):
     isCondition = True
 
 def p_funct(p):
-    '''funct : ID LPAREN RPAREN
-             | ID LPAREN expression expressionList RPAREN'''
+    '''funct : CALL ID LPAREN RPAREN
+             | CALL ID LPAREN expression expressionList RPAREN'''
 
 def p_expressionList(p):
     '''expressionList : empty

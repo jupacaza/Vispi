@@ -27,7 +27,8 @@ reserved = {
 	'false':'C_BOOL',
 	'main' : 'MAIN',
 	'return' : 'RETURN',
-	'def' : 'DEF'
+	'def' : 'DEF',
+	'call' : 'CALL'
 }
 # List of token names.
 tokens = [
@@ -60,7 +61,8 @@ tokens = [
 	'COMMA',
 	'PERIOD',
 	'COLON',  
-	'TAB',
+	#'TAB',
+	'SEMICOLON',
 	'NEWLINE',
 ] + list(reserved.values())
 
@@ -68,7 +70,7 @@ tokens = [
 t_ignore_COMMENT = r'\#.*'
 t_LPAREN        = r'\('
 t_RPAREN        = r'\)'
-
+t_ignore_TAB	= r'\t+'
 
 def t_ID(t):
     r'[a-zA-Z][a-zA-Z0-9_]*'
@@ -112,7 +114,8 @@ t_EQUAL         = r'='
 t_COMMA         = r'\,'
 t_COLON         = r':'
 t_PERIOD        = r'\.'
-t_TAB 			=r'\t'
+t_SEMICOLON		= r';'
+#t_TAB 			=r'\t'
 #t_NEWLINE		=r'\n+'
 
 #Maybe we will need to define a rule to count tabs

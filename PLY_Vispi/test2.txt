@@ -1,16 +1,39 @@
-PROGRAM debugTabsEol
+PROGRAM buscaIntruso 
+CAM webcam:micamara 
+INPUT 17:boton 
+OUTPUT 22:led1,23:led2
+PWM 18:velocidad
+int personas
+string mensajeAlerta
+image imgInicial
 
-int a, velocidad
-bool led1, led2
+personas = 5
+mensajeAlerta = "Alerta de intruso!"
+imgInicial = call takePicture()
 
+def void comparaImagen(int i, float a):
+	image tempImg, diferencias
+	tempImg = call takePicture()
+	diferencias = imgInicial - tempImg
+	call imDisplay(diferencias)
+;
 def void main ():
-	while (1): 
-		if(a == 1):
+	image tempImg
+	while (personas > 5): 
+		if(boton):
+		#comentario
+			call comparaImagen()
 			led2 = true
-			velocidad = 25 
+			velocidad = 25
+			#comentario
+		;
 		else:
-			b = 0    
-  		if(b > 3):
-  			print("Hola")
-		led1 = false 
-  		velocidad = 75
+			tempImg = call takePicture()
+			if( call countObjects(tempImg,"Face") > personas):
+				call print(mensajeAlerta)
+				led1 = true 
+				velocidad = 75
+			;
+		;
+;
+#NECESITAMOS NEWLINE

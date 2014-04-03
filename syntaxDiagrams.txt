@@ -9,13 +9,13 @@ PwmDeclaration ::= ( 'PWM' PinList '\n' )?
 PinList ::= 'c_int' ':' 'id' (',' 'c_int' ':' 'id')*
 Vars ::= (Tipo 'id' (',' 'id')* '\n')*
 Tipo ::= 'bool' | 'int' | 'float' | 'char' | 'string' | 'image'
-Functions ::= ('def' (Tipo | 'void') 'id' '(' (Tipo 'id' (',' Tipo 'id')* )? ')' ':' '\n' Block )*
+Functions ::= ('def' (Tipo | 'void') 'id' '(' (Tipo 'id' (',' Tipo 'id')* )? ')' Block )*
 Assign ::= ( 'id' '=' Expression '\n' )*
-Main ::= 'void' 'main' '(' (Tipo 'id' (',' Tipo 'id')* )? ')' ':' '\n' Block
-Block ::= ('\t' Statement ('\n' '\t' Statement)* )?
+Main ::= 'void' 'main' '(' (Tipo 'id' (',' Tipo 'id')* )? ')' Block
+Block ::= ':' ('\n')? ( Statement ('\n' Statement)* )? ('\n')? ';' '\n'
 Statement ::= Assign | Condition | Cycle | Funct '\n' | 'return' Expression '\n'
-Condition ::= 'if' Expression ':' '\n' Block ('else' ':' '\n' Block)?
-Cycle ::= 'while' Expression ':' '\n' Block | 'do' ':' '\n' Block 'while' Expression '\n'
+Condition ::= 'if' Expression Block ('else' Block)?
+Cycle ::= 'while' Expression Block | 'do' Block 'while' Expression '\n'
 Funct ::= 'id' '(' (Expression (',' Expression)* )? ')'
 Expression ::= Exp (('>'|'<'|'>='|'<='|'!='|'==') Exp)?
 Exp ::= Term ( ('+'|'-') Term )*
